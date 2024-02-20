@@ -9,6 +9,11 @@ int main(int argumentCount, char* arguments[])
 {
     SDL_Window *window;
     SDL_Renderer *renderer;
+    SDL_Surface *surfaceSpriteSheet = SDL_LoadBMP_RW("../sprites/surfaceSpriteSheet.bmp", 1);
+    if(surfaceSpriteSheet == NULL){SDL_Log("Error getting surfaceSpriteSheet\n"); SDL_Quit();}
+    SDL_Texture *textureSpriteSheet = SDL_CreateTextureFromSurface(renderer, surfaceSpriteSheet);
+    SDL_FreeSurface(surfaceSpriteSheet);
+
     if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER) < 0)
     {
         SDL_Log("Error initializing SDL: %s", SDL_GetError());
@@ -27,8 +32,10 @@ int main(int argumentCount, char* arguments[])
     eventHandlerArguments.controller[0] = controller_find();
 
     SDL_Rect rectangle = {0, 0, 200, 200};
-    eventHandlerArguments.player1 = rectangle;
-    eventHandlerArguments.player2 = rectangle;
+    SDL_Rect pacmanRectangle = {0, 0, 200, 200};
+
+    eventHandlerArguments.player1 = pacmanRectangle;
+    //eventHandlerArguments.player2 = rectangle;
 
     char running = 1;
     while(running)
@@ -36,7 +43,7 @@ int main(int argumentCount, char* arguments[])
         SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
         SDL_RenderClear(renderer);
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 100);
-        SDL_RenderFillRect(renderer, &eventHandlerArguments.player1);
+        SDL_RenderCopy(renderer, textureSpriteSheet,NULL , &eventHandlerArguments.player1);
 
         SDL_RenderPresent(renderer);
 
