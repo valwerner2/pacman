@@ -1,4 +1,6 @@
 #include <SDL.h>
+#include <SDL_image.h>
+
 #include "eventHandler.h"
 #include "controller.h"
 
@@ -9,15 +11,18 @@ int main(int argumentCount, char* arguments[])
 {
     SDL_Window *window;
     SDL_Renderer *renderer;
-    SDL_Surface *surfaceSpriteSheet = SDL_LoadBMP_RW("../sprites/surfaceSpriteSheet.bmp", 1);
-    if(surfaceSpriteSheet == NULL){SDL_Log("Error getting surfaceSpriteSheet\n"); SDL_Quit();}
-    SDL_Texture *textureSpriteSheet = SDL_CreateTextureFromSurface(renderer, surfaceSpriteSheet);
-    SDL_FreeSurface(surfaceSpriteSheet);
+    SDL_Surface *surfaceSpriteSheet = NULL;
 
-    if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER) < 0)
+    if(SDL_Init(SDL_INIT_EVERYTHING) < 0)
     {
         SDL_Log("Error initializing SDL: %s", SDL_GetError());
     }
+
+
+    surfaceSpriteSheet = IMG_Load("../sprites/spriteSheet.png");
+    if(surfaceSpriteSheet == NULL){SDL_Log("Error getting spriteSheet\n"); SDL_Quit();}
+    SDL_Texture *textureSpriteSheet = SDL_CreateTextureFromSurface(renderer, surfaceSpriteSheet);
+    SDL_FreeSurface(surfaceSpriteSheet);
 
     window = SDL_CreateWindow("Game Window",
                               SDL_WINDOWPOS_UNDEFINED,
