@@ -9,20 +9,14 @@
 
 int main(int argumentCount, char* arguments[])
 {
-    SDL_Window *window;
-    SDL_Renderer *renderer;
-    SDL_Surface *surfaceSpriteSheet = NULL;
-
     if(SDL_Init(SDL_INIT_EVERYTHING) < 0)
     {
         SDL_Log("Error initializing SDL: %s", SDL_GetError());
     }
 
-
-    surfaceSpriteSheet = IMG_Load("../sprites/spriteSheet.png");
-    if(surfaceSpriteSheet == NULL){SDL_Log("Error getting spriteSheet\n"); SDL_Quit();}
-    SDL_Texture *textureSpriteSheet = SDL_CreateTextureFromSurface(renderer, surfaceSpriteSheet);
-    SDL_FreeSurface(surfaceSpriteSheet);
+    SDL_Window *window;
+    SDL_Renderer *renderer;
+    SDL_Surface *surfaceSpriteSheet;
 
     window = SDL_CreateWindow("Game Window",
                               SDL_WINDOWPOS_UNDEFINED,
@@ -32,6 +26,13 @@ int main(int argumentCount, char* arguments[])
                               0);
 
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+
+    surfaceSpriteSheet = IMG_Load("../sprites/spriteSheet.png");
+    if(surfaceSpriteSheet == NULL){SDL_Log("Error getting spriteSheet\n"); SDL_Quit();}
+    SDL_Texture *textureSpriteSheet = SDL_CreateTextureFromSurface(renderer, surfaceSpriteSheet);
+    if(textureSpriteSheet == NULL){ SDL_Log("Error making texture");}
+    SDL_FreeSurface(surfaceSpriteSheet);
+
     eventHandler_arguments_t eventHandlerArguments;
 
     eventHandlerArguments.controller[0] = controller_find();
