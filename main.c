@@ -1,8 +1,12 @@
 #include <SDL.h>
 #include <SDL_image.h>
+#include <time.h>
 
 #include "eventHandler.h"
 #include "controller.h"
+#include "entity.h"
+#include "pacman.h"
+#include "drawScreen.h"
 
 #define WINDOW_HIGHT 640
 #define WINDOW_HEIGHT 480
@@ -13,10 +17,9 @@ int main(int argumentCount, char* arguments[])
     {
         SDL_Log("Error initializing SDL: %s", SDL_GetError());
     }
-
+    int i = 0;
     SDL_Window *window;
     SDL_Renderer *renderer;
-    SDL_Surface *surfaceSpriteSheet;
 
     window = SDL_CreateWindow("Game Window",
                               SDL_WINDOWPOS_UNDEFINED,
@@ -27,33 +30,25 @@ int main(int argumentCount, char* arguments[])
 
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
-    surfaceSpriteSheet = IMG_Load("../sprites/spriteSheet.png");
-    if(surfaceSpriteSheet == NULL){SDL_Log("Error getting spriteSheet\n"); SDL_Quit();}
-    SDL_Texture *textureSpriteSheet = SDL_CreateTextureFromSurface(renderer, surfaceSpriteSheet);
-    if(textureSpriteSheet == NULL){ SDL_Log("Error making texture");}
-    SDL_FreeSurface(surfaceSpriteSheet);
-
-    eventHandler_arguments_t eventHandlerArguments;
-
+    eventHandler_arguments eventHandlerArguments;
     eventHandlerArguments.controller[0] = controller_find();
 
-    SDL_Rect rectangle = {0, 0, 200, 200};
-    SDL_Rect pacmanRectangle = {0, 0, 200, 200};
+    entityTextures pacmanTexture;
+    createPacmanTexture(&pacmanTexture, renderer);
+    eventHandlerArguments.player1Textures = &pacmanTexture;
 
-    eventHandlerArguments.player1 = pacmanRectangle;
-    //eventHandlerArguments.player2 = rectangle;
+    time_t initTime;
+    time(&initTime);
+    entity pacman = {&pacmanTexture, ENTITY_IDLE, NONE, 0, 0, initTime};
+    eventHandlerArguments.player1 = &pacman;
+
+    drawScreen_arguments drawScreenArguments = {&pacman, 1, renderer};
 
     char running = 1;
     while(running)
     {
-        SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
-        SDL_RenderClear(renderer);
-        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 100);
-        SDL_RenderCopy(renderer, textureSpriteSheet,NULL , &eventHandlerArguments.player1);
-
-        SDL_RenderPresent(renderer);
-
         eventHandler_handler(&eventHandlerArguments);
+        drawScreen(&drawScreenArguments);
+        //SDL_Delay(100);
     }
-    return 0;
 }
