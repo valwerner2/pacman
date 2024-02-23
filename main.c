@@ -7,6 +7,7 @@
 #include "entity.h"
 #include "pacman.h"
 #include "drawScreen.h"
+#include "collisionDetection.h"
 
 #define WINDOW_HIGHT 640
 #define WINDOW_HEIGHT 480
@@ -42,13 +43,25 @@ int main(int argumentCount, char* arguments[])
     entity pacman = {&pacmanTexture, ENTITY_IDLE, NONE, 0, 0, initTime};
     eventHandlerArguments.player1 = &pacman;
 
-    drawScreen_arguments drawScreenArguments = {&pacman, 1, renderer};
+    entityTextures testTextures;
+    createPacmanTexture(&testTextures, renderer);
+    entity testEntity = {&testTextures, ENTITY_IDLE, NONE, 64, 64, initTime};
+
+    entity *entities[] = {&pacman, &testEntity};
+
+    drawScreen_arguments drawScreenArguments = {renderer, entities, 2};
+
+
+
 
     char running = 1;
     while(running)
     {
         eventHandler_handler(&eventHandlerArguments);
         drawScreen(&drawScreenArguments);
+        SDL_Rect obj1 = {pacman.posX, pacman.posY, 32, 32};
+        SDL_Rect obj2 = {testEntity.posX, testEntity.posY, 32, 32};
+        SDL_Log("%u\n", detectCollision(&obj1, &obj2));
         //SDL_Delay(100);
     }
 }

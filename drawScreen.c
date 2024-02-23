@@ -10,13 +10,13 @@ void drawScreen(drawScreen_arguments *args)
     SDL_Rect temp[args->entityCount];
     for(int i = 0; i < args->entityCount; i++)
     {
-        updateTextureEntity(&args->entities[i]);
+        entity *currEntity = args->entities[i];
+        updateTextureEntity(currEntity);
         temp[i].w = 32;
         temp[i].h = 32;
-        temp[i].x = args->entities[i].posX;
-        temp[i].y = args->entities[i].posY;
-        SDL_RenderCopy(args->renderer, args->entities[i].textures->texture, &args->entities[i].textures->sourceCurrent, &temp);
+        temp[i].x = currEntity->posX;
+        temp[i].y = currEntity->posY;
+        SDL_RenderCopy(args->renderer, currEntity->textures->texture, &currEntity->textures->sourceCurrent, &temp[i]);
     }
-
     SDL_RenderPresent(args->renderer);
 }

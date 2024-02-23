@@ -9,9 +9,9 @@
 
 typedef struct
 {
-    entity *entities;
-    unsigned long long entityCount;
     SDL_Renderer *renderer;
+    entity **entities;
+    unsigned long long entityCount;
 
 }drawScreen_arguments;
 

@@ -20,6 +20,8 @@ add_executable(pacman main.c
         pacman.h
         pacman.c
         drawScreen.h
-        drawScreen.c)
+        drawScreen.c
+        collisionDetection.c
+        collisionDetection.h)
 
 target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARIES})
