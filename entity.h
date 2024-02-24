@@ -2,6 +2,7 @@
 // Created by valwe on 21/02/2024.
 //
 #include <SDL.h>
+#include <SDL_image.h>
 #ifndef PACMAN_PLAYER_H
 #define PACMAN_PLAYER_H
 
@@ -41,6 +42,7 @@ typedef struct
     int state;
     int direction;
     int posX, posY;
+    SDL_Rect hitBox;
 
     time_t lastActive;
 }entity;
@@ -54,4 +56,11 @@ enum entityDirection
 
 void updateEntity(entity *entity, int direction);
 void updateTextureEntity(entity *entity);
+entityTextures *entityCreateTextures(char* path, SDL_Renderer *renderer, int *animationInformation,
+                          SDL_Rect *rectIdle,
+                          SDL_Rect *rectUP,
+                          SDL_Rect *rectDown,
+                          SDL_Rect *rectLeft,
+                          SDL_Rect *rectRight);
+void entityDeleteTextures(entityTextures* entityTextures);
 #endif //PACMAN_PLAYER_H

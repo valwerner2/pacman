@@ -6,6 +6,7 @@
 #define PACMAN_DRAWSCREEN_H
 
 #include "entity.h"
+#include "common.h"
 
 typedef struct
 {

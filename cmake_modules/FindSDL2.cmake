@@ -125,9 +125,9 @@ IF(NOT APPLE)
 ENDIF(NOT APPLE)
 
 # MinGW needs an additional link flag, -mwindows
-# It's total link flags should look like -lmingw32 -lSDL2main -lSDL2 -mwindows
+# It's total link flags should look like -lmingwSPRITE_SIZE -lSDL2main -lSDL2 -mwindows
 IF(MINGW)
-	SET(MINGW32_LIBRARY mingw32 "-mwindows" CACHE STRING "mwindows for MinGW")
+	SET(MINGWSPRITE_SIZE_LIBRARY mingwSPRITE_SIZE "-mwindows" CACHE STRING "mwindows for MinGW")
 ENDIF(MINGW)
 
 IF(SDL2_LIBRARY_TEMP)
@@ -157,7 +157,7 @@ IF(SDL2_LIBRARY_TEMP)
 
 	# For MinGW library
 	IF(MINGW)
-		SET(SDL2_LIBRARY_TEMP ${MINGW32_LIBRARY} ${SDL2_LIBRARY_TEMP})
+		SET(SDL2_LIBRARY_TEMP ${MINGWSPRITE_SIZE_LIBRARY} ${SDL2_LIBRARY_TEMP})
 	ENDIF(MINGW)
 
 	# Set the final string here so the GUI reflects the final state.

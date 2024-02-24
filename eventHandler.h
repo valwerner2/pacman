@@ -16,8 +16,6 @@ typedef struct
     entity *player1;
     entity *player2;
 
-    entityTextures *player1Textures;
-
     SDL_GameController *controller[2];
     int controllerAmount;
 }eventHandler_arguments;
