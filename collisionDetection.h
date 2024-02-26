@@ -4,7 +4,7 @@
 
 #ifndef PACMAN_COLLISIONDETECTION_H
 #define PACMAN_COLLISIONDETECTION_H
-#include <SDL.h>
+#include "common.h"
 
 enum collision
 {

@@ -1,7 +1,7 @@
 //
 // Created by valwe on 18/02/2024.
 //
-#include <SDL.h>
+#include "controller.h"
 
 SDL_GameController *controller_find() {
     SDL_Log("con: %d\n", SDL_NumJoysticks());

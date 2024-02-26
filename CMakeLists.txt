@@ -25,7 +25,13 @@ add_executable(pacman main.c
         collisionDetection.h
         ghost.h
         ghost.c
-        common.h)
+        common.h
+        bigCoin.h
+        bigCoin.c
+        smallCoin.c
+        smallCoin.h
+        pathFinding.c
+        pathFinding.h)
 
 target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARIES})
 

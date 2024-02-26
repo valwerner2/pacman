@@ -1,7 +1,6 @@
 //
 // Created by valwe on 18/02/2024.
 //
-#include <SDL.h>
 #include "entity.h"
 
 #ifndef PACMAN_EVENTHANDLER_H

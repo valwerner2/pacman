@@ -4,7 +4,7 @@
 #ifndef PACMAN_PACMAN_H
 #define PACMAN_PACMAN_H
 
-#include <time.h>
+
 
 #include "entity.h"
 #include "common.h"

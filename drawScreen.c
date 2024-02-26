@@ -2,21 +2,30 @@
 // Created by valwe on 22/02/2024.
 //
 #include "drawScreen.h"
-void drawScreen(drawScreen_arguments *args)
+void drawScreen(SDL_Renderer *renderer, unsigned int layerCount, ...)
 {
-    SDL_SetRenderDrawColor(args->renderer, 0, 0, 0, 255);
-    SDL_RenderClear(args->renderer);
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderClear(renderer);
 
-    SDL_Rect temp[args->entityCount];
-    for(int i = 0; i < args->entityCount; i++)
+    va_list varList;
+    va_start(varList, layerCount);
+    for(int layer = 0; layer < layerCount; layer++)
     {
-        entity *currEntity = args->entities[i];
-        updateTextureEntity(currEntity);
-        temp[i].w = SPRITE_SIZE;
-        temp[i].h = SPRITE_SIZE;
-        temp[i].x = currEntity->posX;
-        temp[i].y = currEntity->posY;
-        SDL_RenderCopy(args->renderer, currEntity->textures->texture, &currEntity->textures->sourceCurrent, &temp[i]);
+        entity **currEntities = va_arg(varList, entity**);
+        unsigned long long entityCount = va_arg(varList, unsigned long long);
+        SDL_Rect temp[entityCount];
+        for (int currentEntity = 0; currentEntity < entityCount; currentEntity++)
+        {
+            entity *currEntity = currEntities[currentEntity];
+            updateTextureEntity(currEntity);
+            temp[currentEntity].w = SPRITE_SIZE_RENDER;
+            temp[currentEntity].h = SPRITE_SIZE_RENDER;
+            temp[currentEntity].x = currEntity->posX * SPRITE_SIZE_RENDER / SPRITE_SIZE_SOURCE;
+            temp[currentEntity].y = currEntity->posY * SPRITE_SIZE_RENDER / SPRITE_SIZE_SOURCE;
+            SDL_RenderCopy(renderer, currEntity->textures->texture, &currEntity->textures->sourceCurrent,
+                           &temp[currentEntity]);
+        }
     }
-    SDL_RenderPresent(args->renderer);
+    SDL_RenderPresent(renderer);
+    va_end(varList);
 }

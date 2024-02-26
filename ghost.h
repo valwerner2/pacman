@@ -5,7 +5,7 @@
 #ifndef PACMAN_GHOST_H
 #define PACMAN_GHOST_H
 
-#include <time.h>
+
 
 #include "entity.h"
 #include "common.h"

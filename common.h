@@ -5,6 +5,14 @@
 #ifndef PACMAN_COMMON_H
 #define PACMAN_COMMON_H
 
-#define SPRITE_SIZE 32
+#include <SDL.h>
+#include <SDL_image.h>
+#include <time.h>
+
+#define SPRITE_SIZE_SOURCE 32
+#define SPRITE_SIZE_RENDER 32
+
+#define POS(x) x*SPRITE_SIZE_SOURCE
+
 
 #endif //PACMAN_COMMON_H

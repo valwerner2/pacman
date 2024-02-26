@@ -7,15 +7,9 @@
 
 #include "entity.h"
 #include "common.h"
+#include "pathFinding.h"
 
-typedef struct
-{
-    SDL_Renderer *renderer;
-    entity **entities;
-    unsigned long long entityCount;
 
-}drawScreen_arguments;
-
-void drawScreen(drawScreen_arguments *args);
+void drawScreen(SDL_Renderer *renderer, unsigned int layerCount, ...);
 
 #endif //PACMAN_DRAWSCREEN_H
