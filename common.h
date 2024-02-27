@@ -12,7 +12,7 @@
 #define SPRITE_SIZE_SOURCE 32
 #define SPRITE_SIZE_RENDER 32
 
-#define POS(x) x*SPRITE_SIZE_SOURCE
+#define POS(x) (x)*SPRITE_SIZE_SOURCE
 
 
 #endif //PACMAN_COMMON_H

@@ -4,7 +4,9 @@
 
 #ifndef PACMAN_COLLISIONDETECTION_H
 #define PACMAN_COLLISIONDETECTION_H
+
 #include "common.h"
+#include "entity.h"
 
 enum collision
 {
@@ -15,6 +17,9 @@ enum collision
     COLLISION_RIGHT = 0b1000
 };
 
-int detectCollision(SDL_Rect *obj1, SDL_Rect *obj2);
+int detectCollisionRect(SDL_Rect *obj1, SDL_Rect *obj2);
+int detectCollisionEntity(entity *entity1, entity *entity2);
+int detectCollisionEntityEntities(entity *e, entity **entities, unsigned long long entityCount);
+int detectCollisionEntityDirectionEntities(entity *e, int  direction, entity **entities, unsigned long long entityCount);
 
 #endif //PACMAN_COLLISIONDETECTION_H

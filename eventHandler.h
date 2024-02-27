@@ -1,10 +1,11 @@
 //
 // Created by valwe on 18/02/2024.
 //
-#include "entity.h"
-
 #ifndef PACMAN_EVENTHANDLER_H
 #define PACMAN_EVENTHANDLER_H
+
+#include "entity.h"
+#include "collisionDetection.h"
 
 typedef struct
 {
@@ -14,6 +15,9 @@ typedef struct
 
     entity *player1;
     entity *player2;
+
+    entity **collisionEntities;
+    unsigned long long collisionEntitiesCount;
 
     SDL_GameController *controller[2];
     int controllerAmount;

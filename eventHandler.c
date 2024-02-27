@@ -71,7 +71,8 @@ void eventHandler_keyDown(eventHandler_arguments* args)
             direction = RIGHT;
             break;
     }
-    updateEntity(args->player1, direction);
+    if(!detectCollisionEntityDirectionEntities(args->player1, direction, args->collisionEntities, args->collisionEntitiesCount))
+    {updateEntity(args->player1, direction);}
 }
 void eventHandler_keyUp(eventHandler_arguments *args)
 {

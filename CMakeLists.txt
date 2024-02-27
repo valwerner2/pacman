@@ -31,7 +31,11 @@ add_executable(pacman main.c
         smallCoin.c
         smallCoin.h
         pathFinding.c
-        pathFinding.h)
+        pathFinding.h
+        wall.c
+        wall.h
+        maze.c
+        maze.h)
 
 target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARIES})
 

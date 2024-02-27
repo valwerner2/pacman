@@ -67,7 +67,7 @@ ghost *createGhost(int startX, int startY, unsigned char r, unsigned char g, uns
     gh->entity->hitBox.w = SPRITE_SIZE_SOURCE - 5 * 2;
     gh->entity->hitBox.h = SPRITE_SIZE_SOURCE - 2 * 2 - 1;
     gh->entity->lastActive = initTime;
-    gh->entity->pathFindingCollision = 0;
+    gh->entity->pathFindingCollision = 1;
 
 
     SDL_SetTextureColorMod(gh->entity->textures->texture, r, g, b);

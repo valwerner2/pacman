@@ -4,7 +4,7 @@
 #ifndef PACMAN_PLAYER_H
 #define PACMAN_PLAYER_H
 
-#define MOVE_AMOUNT 1
+#define MOVE_AMOUNT 32
 
 #include "common.h"
 

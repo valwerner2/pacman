@@ -49,7 +49,7 @@ pathFindingMap_Grid **createPathFindingMap_Grid(SDL_Renderer *renderer,
                     if(entities[e]->pathFindingCollision)
                     {
                         SDL_Rect temp = {x * fieldSize, y * fieldSize, fieldSize, fieldSize};
-                        if (detectCollision(&entities[e]->hitBox, &temp))
+                        if (detectCollisionRect(&entities[e]->hitBox, &temp))
                         {
                             SDL_Log("HERE");
                             if (grid[x][y].topFree)     { grid[x][y - 1].bottomFree = 0; }
