@@ -45,7 +45,12 @@ pacman *createPacman(int startX, int startY, SDL_Renderer *renderer)
     time_t initTime;
     time(&initTime);
 
+
     pac->entity->textures = createPacmanTexture(renderer);
+    pac->entity->textures->flip = SDL_FLIP_NONE;
+    pac->entity->textures->center = NULL;
+    pac->entity->textures->angle = 0.;
+
     pac->entity->state = ENTITY_IDLE;
     pac->entity->direction = NONE;
     pac->entity->posX = startX;

@@ -9,7 +9,14 @@
 #include "common.h"
 #include "pathFinding.h"
 
+typedef struct
+{
+    signed long long z;
+    entity **entities;
+    unsigned long long entityCount;
+}layer;
 
-void drawScreen(SDL_Renderer *renderer, unsigned int layerCount, ...);
+void drawScreen(SDL_Renderer *renderer, unsigned int layerCount, layer *layers);
+int compareLayers(const void *a, const void *b);
 
 #endif //PACMAN_DRAWSCREEN_H

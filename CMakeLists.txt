@@ -35,7 +35,8 @@ add_executable(pacman main.c
         wall.c
         wall.h
         maze.c
-        maze.h)
+        maze.h
+        common.c)
 
 target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARIES})
 

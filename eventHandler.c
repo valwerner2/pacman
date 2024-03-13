@@ -2,12 +2,12 @@
 // Created by valwe on 18/02/2024.
 //
 #include "eventHandler.h"
-#include "controller.h"
 
 void eventHandler_cleanUpOnClose(eventHandler_arguments *args);
 void eventHandler_keyDown(eventHandler_arguments *args);
 void eventHandler_controllerButtonDown(eventHandler_arguments *args);
 void eventHandler_keyUp(eventHandler_arguments *args);
+
 
 int eventHandler_handler(eventHandler_arguments *args)
 {
@@ -45,6 +45,7 @@ int eventHandler_handler(eventHandler_arguments *args)
             eventHandler_keyUp(args);
             break;
     }
+
     return 1;
 }
 void eventHandler_cleanUpOnClose(eventHandler_arguments *args)
@@ -69,6 +70,18 @@ void eventHandler_keyDown(eventHandler_arguments* args)
             break;
         case SDLK_RIGHT:
             direction = RIGHT;
+            break;
+        case SDLK_e:
+            for(int i = 0; i < 4; i ++){args->ghosts[i]->state = GHOST_EATEN;}
+            break;
+        case SDLK_c:
+            for(int i = 0; i < 4; i ++){args->ghosts[i]->state = GHOST_CHASE;}
+            break;
+        case SDLK_s:
+            for(int i = 0; i < 4; i ++){args->ghosts[i]->state = GHOST_SCATTER;}
+            break;
+        case SDLK_f:
+            for(int i = 0; i < 4; i ++){args->ghosts[i]->state = GHOST_FRIGHTENED;}
             break;
     }
     if(!detectCollisionEntityDirectionEntities(args->player1, direction, args->collisionEntities, args->collisionEntitiesCount))
@@ -121,5 +134,27 @@ void eventHandler_controllerButtonDown(eventHandler_arguments *args)
         }
     }
     updateEntity(args->player1, direction);
+}
+void updateGhosts(eventHandler_arguments *args)
+{
+    for(int i = 0; i < 4; i++)
+    {
+        time_t currTime;
+        time(&currTime);
+        if(timeElapsed(args->ghosts[i]->movementDelay, &args->ghosts[i]->lastMoved))
+        {
+            ghostChangeState(args->ghosts[i], NULL, NULL);
+            entity target = getGhostTarget(args->ghosts[i], args->ghosts, args->player1);
+            int prisonDoorVisible = args->ghosts[i]->state == GHOST_LEAVE_PRISON
+                                    || args->ghosts[i]->state == GHOST_EATEN
+                                    ? 1 : 0;
+            updateEntity(args->ghosts[i]->entity,
+                         ghostChaseNextDirection(args->ghosts[i],
+                                                 &target,
+                                                 args->collisionEntities,
+                                                 args->collisionEntitiesCount - prisonDoorVisible));
+        }
+        ghostTextureSwitch(args->ghosts[i]);
+    }
 }
 

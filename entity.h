@@ -4,7 +4,7 @@
 #ifndef PACMAN_PLAYER_H
 #define PACMAN_PLAYER_H
 
-#define MOVE_AMOUNT 32
+#define MOVE_AMOUNT 8
 
 #include "common.h"
 
@@ -26,6 +26,9 @@ typedef struct
 
     int animationInformation[18];
 
+    double angle;
+    SDL_Point *center;
+    SDL_RendererFlip flip;
     struct timeval *lastAnimation;
     unsigned long long microsecondsAnimationTime;
 
@@ -62,6 +65,7 @@ typedef struct
     int posX, posY;
     SDL_Rect hitBox;
 
+
     char pathFindingCollision;
     time_t lastActive;
 }entity;
@@ -74,6 +78,7 @@ enum entityDirection
 
 
 void updateEntity(entity *entity, int direction);
+void updateEntitySet(entity *entity, int x, int y,int direction);
 void updateTextureEntity(entity *entity);
 entityTextures *entityCreateTextures(char* path, SDL_Renderer *renderer,
                                      int *animationInformation,
@@ -89,4 +94,5 @@ entityTextures *entityCreateTextures(char* path, SDL_Renderer *renderer,
                                      SDL_Rect *rectIdleRight);
 
 void entityDeleteTextures(entityTextures* entityTextures);
+unsigned long long getDistanceEntity(entity *e1, entity *e2);
 #endif //PACMAN_PLAYER_H

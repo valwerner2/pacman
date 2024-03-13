@@ -39,11 +39,12 @@ int main(int argumentCount, char* arguments[])
 
     pacman *pacman = createPacman(POS(9), POS(16), renderer);
 
-    ghost *ghost1 = createGhost(POS(9), POS(9), 255, 255, 255, renderer);
-    ghost *ghost2 = createGhost(POS(9), POS(10), 150, 255, 255, renderer);
-    ghost *ghost3 = createGhost(POS(8), POS(10), 255, 150, 100, renderer);
-    ghost *ghost4 = createGhost(POS(10), POS(10), 255, 255, 150, renderer);
-    //ghost *ghost5 = createGhost(POS(9), POS(0), 50, 50, 255, renderer);
+    ghost *ghostRed = createGhost(POS(9), POS(8), GHOST_TYPE_RED, renderer);
+    ghost *ghostPurple = createGhost(POS(9), POS(10), GHOST_TYPE_PURPLE, renderer);
+    ghost *ghostOrange = createGhost(POS(8), POS(10), GHOST_TYPE_ORANGEN, renderer);
+    ghost *ghostCyan = createGhost(POS(10), POS(10), GHOST_TYPE_CYAN, renderer);
+
+
 
     bigCoin *bigCoin1 = createBigCoin(64, 128, renderer);
     bigCoin *bigCoin2 = createBigCoin(128, 128, renderer);
@@ -58,12 +59,15 @@ int main(int argumentCount, char* arguments[])
 
     eventHandlerArguments.player1 = pacman->entity;
 
+    ghost *ghosts[] = {ghostRed,
+                                ghostPurple,
+                                ghostOrange,
+                                ghostCyan};
 
-    entity *ghosts[] = {    ghost1->entity,
-                            ghost2->entity,
-                            ghost3->entity,
-                            ghost4->entity/*,
-                            ghost5->entity*/};
+    entity *ghostsEntities[] = {ghostRed->entity,
+                                ghostPurple->entity,
+                                ghostOrange->entity,
+                                ghostCyan->entity};
     entity *bigCoins[] = {  bigCoin1->entity,
                             bigCoin2->entity,
                             bigCoin3->entity,
@@ -77,16 +81,32 @@ int main(int argumentCount, char* arguments[])
 
     eventHandlerArguments.collisionEntities = walls;
     eventHandlerArguments.collisionEntitiesCount = wallAmount;
+    eventHandlerArguments.ghosts = ghosts;
 
     pathFindingMap_Grid **pathGrid = createPathFindingMap_Grid(renderer, 32, walls, wallAmount);
     unsigned long long gridEntityCount = 0;
     entity **gridEntities = pathFindingMapGridToEntities(pathGrid, renderer, 32, &gridEntityCount);
+
+    entity *teleportable[] = {ghostRed->entity,
+                              ghostPurple->entity,
+                              ghostOrange->entity,
+                              ghostCyan->entity,
+                              pacman->entity};
+    SDL_Rect teleportLeft = {POS(0), POS(10), SPRITE_SIZE_SOURCE, SPRITE_SIZE_SOURCE};
+    SDL_Rect teleportRight = {POS(18), POS(10), SPRITE_SIZE_SOURCE, SPRITE_SIZE_SOURCE};
+
+    layer layers[] = {{0, walls, wallAmount},
+                      {1, &pacman->entity, 1},
+                      {2, ghostsEntities, 4}};
+
     char running = 1;
     while(running)
     {
+        detectCollisionEntitiesTeleportBidirectional(teleportable, 5, &teleportLeft, &teleportRight, RIGHT, LEFT);
         eventHandler_handler(&eventHandlerArguments);
-        //SDL_Log("%u\n", detectCollisionRect(&pacman->entity->hitBox, &ghost1->entity->hitBox));
-        drawScreen(renderer, 3, /*gridEntities, gridEntityCount,*/ &pacman->entity, 1ll, ghosts, 4ll, walls, wallAmount);
+        updateGhosts(&eventHandlerArguments);
+        //SDL_Log("%u\n", detectCollisionRect(&pacman->entity->hitBox, &ghostRed->entity->hitBox));
+        drawScreen(renderer, 3, layers);
         //SDL_Delay(100);
     }
 }

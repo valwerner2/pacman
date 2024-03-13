@@ -32,18 +32,28 @@ void updateEntity(entity *entity, int direction)
     entity->state = ENTITY_MOVING;
     time(&entity->lastActive);
 }
+void updateEntitySet(entity *entity, int x, int y,int direction)
+{
+    int dx, dy;
+    dx = entity->posX - x;
+    dy = entity->posY - y;
+
+    entity->posX -= dx; entity->hitBox.x -= dx;
+    entity->posY -= dy; entity->hitBox.y -= dy;
+
+    entity->direction = direction;
+    entity->state = ENTITY_MOVING;
+    time(&entity->lastActive);
+}
 void updateTextureEntity(entity *entity)
 {
     int temp_ani_count = 0;
     int temp_ani_curr = 0;
     SDL_Rect *aniArray = entity->textures->sourceIdle;
     //SDL_Log("%s\n", entity->state == ENTITY_IDLE ? "IDLE" : "MOVING");
-    struct timeval currTime;
-    mingw_gettimeofday(&currTime, NULL);
 
-    if (entity->textures->microsecondsAnimationTime < ((currTime.tv_sec - entity->textures->lastAnimation->tv_sec) * 1000000 + currTime.tv_usec - entity->textures->lastAnimation->tv_usec))
+    if (timeElapsed(entity->textures->microsecondsAnimationTime, entity->textures->lastAnimation))
     {
-        memcpy(entity->textures->lastAnimation, &currTime, sizeof(struct timeval));
         int i = 0;
         switch (entity->state)
         {
@@ -185,4 +195,17 @@ void entityDeleteTextures(entityTextures* entityTextures)
     free(entityTextures->sourceRight);
 
     SDL_DestroyTexture(entityTextures->texture);
+}
+
+unsigned long long getDistanceEntity(entity *e1, entity *e2)
+{
+    vecUnsigned point1 = {(unsigned long long)e1->hitBox.x + ((unsigned long long)e1->hitBox.w / 2llu), (unsigned long long)e1->hitBox.y + ((unsigned long long)e1->hitBox.h / 2llu)};
+    vecUnsigned point2 = {(unsigned long long)e2->hitBox.x + ((unsigned long long)e2->hitBox.w / 2llu), (unsigned long long)e2->hitBox.y + ((unsigned long long)e2->hitBox.h / 2llu)};
+
+
+    vecUnsigned vec1 = {point1.x - point2.x, point1.y - point2.y};
+
+    //SDL_Log("X:%4d Y%4d = %8d", vec1.x, vec1.y, vec1.x*vec1.x + vec1.y*vec1.y);
+
+    return vec1.x*vec1.x + vec1.y*vec1.y;
 }
