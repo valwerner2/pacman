@@ -26,5 +26,6 @@ int ghostChaseNextDirection(ghost *chaserGhost, entity *target, entity **map, un
 int detectCollisionEntityTeleportDirectional(entity *e, SDL_Rect *start, SDL_Rect *end, int newDirection);
 int detectCollisionEntityTeleportBidirectional(entity *e, SDL_Rect *temp1, SDL_Rect *temp2, int directionT1, int directionT2);
 int detectCollisionEntitiesTeleportBidirectional(entity **e, int entityCount, SDL_Rect *t1, SDL_Rect *t2, int directionT1, int directionT2);
+int detectCollisionEntityVisibleEntities(entity *e, entity **entities, int entityCount);
 
 #endif //PACMAN_COLLISIONDETECTION_H

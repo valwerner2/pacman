@@ -12,7 +12,7 @@
 typedef struct
 {
     entity* entity;
-
+    int state;
 }pacman;
 
 entityTextures *createPacmanTexture(SDL_Renderer *renderer);

@@ -233,3 +233,14 @@ int detectCollisionEntitiesTeleportBidirectional(entity **e, int entityCount, SD
     for(int i = 0; i < entityCount; i++){col |= detectCollisionEntityTeleportBidirectional(e[i], t1, t2, directionT1, directionT2);}
     return col;
 }
+int detectCollisionEntityVisibleEntities(entity *e, entity **entities, int entityCount)
+{
+    for(int i = 0; i < entityCount; i++)
+    {
+        if(entities[i]->visible)
+        {
+            if(detectCollisionEntity(e, entities[i])){return i;}
+        }
+    }
+    return -1;
+}

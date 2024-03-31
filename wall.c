@@ -91,6 +91,7 @@ wall *createWall(int type, int startX, int startY, SDL_Renderer *renderer, doubl
     w->entity->hitBox.h = SPRITE_SIZE_SOURCE;
     w->entity->lastActive = initTime;
     w->entity->pathFindingCollision = 1;
+    w->entity->visible = 1;
 
     return w;
 }

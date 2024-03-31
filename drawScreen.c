@@ -15,13 +15,17 @@ void drawScreen(SDL_Renderer *renderer, unsigned int layerCount, layer *layers)
         for (int currentEntity = 0; currentEntity < layers[currentLayer].entityCount; currentEntity++)
         {
             entity *currEntity = layers[currentLayer].entities[currentEntity];
-            updateTextureEntity(currEntity);
-            temp[currentEntity].w = SPRITE_SIZE_RENDER;
-            temp[currentEntity].h = SPRITE_SIZE_RENDER;
-            temp[currentEntity].x = currEntity->posX * SPRITE_SIZE_RENDER / SPRITE_SIZE_SOURCE;
-            temp[currentEntity].y = currEntity->posY * SPRITE_SIZE_RENDER / SPRITE_SIZE_SOURCE;
-            SDL_RenderCopyEx(renderer, currEntity->textures->texture, &currEntity->textures->sourceCurrent,
-                           &temp[currentEntity], currEntity->textures->angle, currEntity->textures->center, currEntity->textures->flip);
+            if(currEntity->visible)
+            {
+                updateTextureEntity(currEntity);
+                temp[currentEntity].w = SPRITE_SIZE_RENDER;
+                temp[currentEntity].h = SPRITE_SIZE_RENDER;
+                temp[currentEntity].x = currEntity->posX * SPRITE_SIZE_RENDER / SPRITE_SIZE_SOURCE;
+                temp[currentEntity].y = currEntity->posY * SPRITE_SIZE_RENDER / SPRITE_SIZE_SOURCE;
+                SDL_RenderCopyEx(renderer, currEntity->textures->texture, &currEntity->textures->sourceCurrent,
+                                 &temp[currentEntity], currEntity->textures->angle, currEntity->textures->center,
+                                 currEntity->textures->flip);
+            }
         }
     }
     SDL_RenderPresent(renderer);

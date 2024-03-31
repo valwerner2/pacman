@@ -12,7 +12,7 @@
 #include "wall.h"
 #include "maze.h"
 
-#define WINDOW_HIGHT 1080
+#define WINDOW_WIDTH 1080
 #define WINDOW_HEIGHT 720
 
 int main(int argumentCount, char* arguments[])
@@ -28,7 +28,7 @@ int main(int argumentCount, char* arguments[])
     window = SDL_CreateWindow("Game Window",
                               SDL_WINDOWPOS_UNDEFINED,
                               30,
-                              WINDOW_HIGHT,
+                              WINDOW_WIDTH,
                               WINDOW_HEIGHT,
                               0);
 
@@ -44,20 +44,13 @@ int main(int argumentCount, char* arguments[])
     ghost *ghostOrange = createGhost(POS(8), POS(10), GHOST_TYPE_ORANGEN, renderer);
     ghost *ghostCyan = createGhost(POS(10), POS(10), GHOST_TYPE_CYAN, renderer);
 
+    bigCoin *bigCoin1 = createBigCoin(POS(1), POS(3) - 16, renderer);
+    bigCoin *bigCoin2 = createBigCoin(POS(17), POS(3) - 16, renderer);
+    bigCoin *bigCoin3 = createBigCoin(POS(1), POS(16), renderer);
+    bigCoin *bigCoin4 = createBigCoin(POS(17), POS(16), renderer);
 
 
-    bigCoin *bigCoin1 = createBigCoin(64, 128, renderer);
-    bigCoin *bigCoin2 = createBigCoin(128, 128, renderer);
-    bigCoin *bigCoin3 = createBigCoin(64, 192, renderer);
-    bigCoin *bigCoin4 = createBigCoin(128, 192, renderer);
-
-    smallCoin *smallCoin1 = createSmallCoin(128 + 64, 128, renderer);
-    smallCoin *smallCoin2 = createSmallCoin(128 + 128, 128, renderer);
-    smallCoin *smallCoin3 = createSmallCoin(128 + 64, 192, renderer);
-    smallCoin *smallCoin4 = createSmallCoin(128 + 128, 192, renderer);
-
-
-    eventHandlerArguments.player1 = pacman->entity;
+    eventHandlerArguments.pac = pacman;
 
     ghost *ghosts[] = {ghostRed,
                                 ghostPurple,
@@ -72,20 +65,28 @@ int main(int argumentCount, char* arguments[])
                             bigCoin2->entity,
                             bigCoin3->entity,
                             bigCoin4->entity};
-    entity *smallCoins[] = {smallCoin1->entity,
-                            smallCoin2->entity,
-                            smallCoin3->entity,
-                            smallCoin4->entity};
+    int smallCoinCount = 0;
+    entity **smallCoins = createSmallCoins(renderer, &smallCoinCount);
     unsigned long long wallAmount = 0;
     entity **walls = createMaze(renderer, &wallAmount);
 
     eventHandlerArguments.collisionEntities = walls;
     eventHandlerArguments.collisionEntitiesCount = wallAmount;
     eventHandlerArguments.ghosts = ghosts;
+    eventHandlerArguments.bigCoins = bigCoins;
+    eventHandlerArguments.bigCoinCount = 4;
+    eventHandlerArguments.smallCoins = smallCoins;
+    eventHandlerArguments.smallCoinCount = smallCoinCount;
+    eventHandlerArguments.level = 1;
+    mingw_gettimeofday(&eventHandlerArguments.levelStartTime, NULL);
+    eventHandlerArguments.dotsLeft = 244;
+    mingw_gettimeofday(&eventHandlerArguments.frightenedStartTime, NULL);
+    eventHandlerArguments.points = 0;
+    eventHandlerArguments.ghostEatenMultiplier = 1;
 
-    pathFindingMap_Grid **pathGrid = createPathFindingMap_Grid(renderer, 32, walls, wallAmount);
-    unsigned long long gridEntityCount = 0;
-    entity **gridEntities = pathFindingMapGridToEntities(pathGrid, renderer, 32, &gridEntityCount);
+    //pathFindingMap_Grid **pathGrid = createPathFindingMap_Grid(renderer, 32, walls, wallAmount);
+    //unsigned long long gridEntityCount = 0;
+    //entity **gridEntities = pathFindingMapGridToEntities(pathGrid, renderer, 32, &gridEntityCount);
 
     entity *teleportable[] = {ghostRed->entity,
                               ghostPurple->entity,
@@ -96,8 +97,10 @@ int main(int argumentCount, char* arguments[])
     SDL_Rect teleportRight = {POS(18), POS(10), SPRITE_SIZE_SOURCE, SPRITE_SIZE_SOURCE};
 
     layer layers[] = {{0, walls, wallAmount},
-                      {1, &pacman->entity, 1},
-                      {2, ghostsEntities, 4}};
+                      {2, &pacman->entity, 1},
+                      {3, ghostsEntities, 4},
+                      {1, bigCoins, 4},
+                      {1, smallCoins, smallCoinCount}};
 
     char running = 1;
     while(running)
@@ -105,8 +108,36 @@ int main(int argumentCount, char* arguments[])
         detectCollisionEntitiesTeleportBidirectional(teleportable, 5, &teleportLeft, &teleportRight, RIGHT, LEFT);
         eventHandler_handler(&eventHandlerArguments);
         updateGhosts(&eventHandlerArguments);
+        coinCollection(&eventHandlerArguments);
+
         //SDL_Log("%u\n", detectCollisionRect(&pacman->entity->hitBox, &ghostRed->entity->hitBox));
-        drawScreen(renderer, 3, layers);
+        drawScreen(renderer, 5, layers);
         //SDL_Delay(100);
+        if(!eventHandlerArguments.dotsLeft)
+        {
+            pacman->entity->posX = POS(9);
+            pacman->entity->posY = POS(16);
+
+            ghostRed->entity->posX = POS(9);
+            ghostRed->entity->posY = POS(8);
+
+            ghostPurple->entity->posX = POS(9);
+            ghostPurple->entity->posY = POS(10);
+
+            ghostOrange->entity->posX = POS(9);
+            ghostOrange->entity->posY = POS(10);
+
+            ghostCyan->entity->posX = POS(10);
+            ghostCyan->entity->posY = POS(10);
+
+            for(int i = 0; i < eventHandlerArguments.smallCoinCount; i++)
+            {
+                eventHandlerArguments.smallCoins[i]->visible = 1;
+            }
+            for(int i = 0; i < eventHandlerArguments.bigCoinCount; i++)
+            {
+                eventHandlerArguments.bigCoins[i]->visible = 1;
+            }
+        }
     }
 }

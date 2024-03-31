@@ -61,6 +61,7 @@ pacman *createPacman(int startX, int startY, SDL_Renderer *renderer)
     pac->entity->hitBox.h = SPRITE_SIZE_SOURCE;
     pac->entity->lastActive = initTime;
     pac->entity->pathFindingCollision = 1;
+    pac->entity->visible = 1;
 
     return pac;
 }

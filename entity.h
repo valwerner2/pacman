@@ -64,7 +64,7 @@ typedef struct
     int direction;
     int posX, posY;
     SDL_Rect hitBox;
-
+    int visible;
 
     char pathFindingCollision;
     time_t lastActive;

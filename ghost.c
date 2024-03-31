@@ -81,7 +81,6 @@ ghost *createGhost(int startX, int startY, int type, SDL_Renderer *renderer)
     gh->texturesChaseScatter = createGhostTexture(renderer, type);
     gh->texturesFrightened = createGhostTexture(renderer, GHOST_TYPE_FRIGHTENED);
     gh->texturesEaten = createGhostTexture(renderer, GHOST_TYPE_EATEN);
-    gh->state = GHOST_CHASE;
     gh->type = type;
     gh->texturesChaseScatter->flip = SDL_FLIP_NONE;
     gh->texturesChaseScatter->center = NULL;
@@ -94,6 +93,8 @@ ghost *createGhost(int startX, int startY, int type, SDL_Renderer *renderer)
     gh->texturesEaten->flip = SDL_FLIP_NONE;
     gh->texturesEaten->center = NULL;
     gh->texturesEaten->angle = 0.;
+
+    gh->entity->visible = 1;
 
 
     gh->movementDelay = 90000;
@@ -110,6 +111,16 @@ ghost *createGhost(int startX, int startY, int type, SDL_Renderer *renderer)
     gh->entity->hitBox.h = SPRITE_SIZE_SOURCE - 2 * 2 - 1;
     gh->entity->lastActive = initTime;
     gh->entity->pathFindingCollision = 1;
+
+    switch (type)
+    {
+        case GHOST_TYPE_RED:
+            gh->state = GHOST_CHASE;
+            break;
+        default:
+            gh->state = GHOST_EATEN;
+            break;
+    }
 
     return gh;
 }

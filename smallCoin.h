@@ -18,6 +18,7 @@ typedef struct
 
 entityTextures *createSmallCoinTexture(SDL_Renderer *renderer);
 smallCoin *createSmallCoin(int startX, int startY, SDL_Renderer *renderer);
+entity **createSmallCoins(SDL_Renderer *renderer, int *smallCoinCount);
 
 void freeSmallCoin(smallCoin *smallCoin);
 

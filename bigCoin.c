@@ -2,9 +2,6 @@
 // Created by valwe on 24/02/2024.
 //
 #include "bigCoin.h"
-
-#define POS(x) x*SPRITE_SIZE_SOURCE
-
 entityTextures *createBigCoinTexture(SDL_Renderer *renderer)
 {
     char *path = "../sprites/sheetBigCoin.png";
@@ -42,6 +39,7 @@ bigCoin *createBigCoin(int startX, int startY, SDL_Renderer *renderer)
     time_t initTime;
     time(&initTime);
 
+
     bigC->entity->textures = createBigCoinTexture(renderer);
     bigC->entity->state = ENTITY_IDLE;
     bigC->entity->direction = NONE;
@@ -53,6 +51,11 @@ bigCoin *createBigCoin(int startX, int startY, SDL_Renderer *renderer)
     bigC->entity->hitBox.h = SPRITE_SIZE_SOURCE;
     bigC->entity->lastActive = initTime;
     bigC->entity->pathFindingCollision = 0;
+    bigC->entity->visible = 1;
+
+    bigC->entity->textures->flip = SDL_FLIP_NONE;
+    bigC->entity->textures->center = NULL;
+    bigC->entity->textures->angle = 0.;
 
     return bigC;
 }
